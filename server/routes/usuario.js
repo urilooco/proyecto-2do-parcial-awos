@@ -9,24 +9,24 @@ app.get("/usuario", function (req, res) {
   let hasta = req.query.hasta || 5;
 
   Usuario.find({ estado: true })
-  .skip(Number(desde))
-  .limit(Number(hasta))
-  .exec((err, usuarios) =>{
-    if(err){
-      return res.status(400).json({
-        ok: false,
-        msg: 'Ocurrió un error al momento de consultar',
-        err
-      });
-    }
+    .skip(Number(desde))
+    .limit(Number(hasta))
+    .exec((err, usuarios) => {
+      if (err) {
+        return res.status(400).json({
+          ok: false,
+          msg: 'Ocurrió un error al momento de consultar',
+          err
+        });
+      }
 
-    res.json({
-      ok: true,
-      msg: 'Lista de usuarios obtenida con éxito',
-      conteo: usuarios.length,
-      usuarios
+      res.json({
+        ok: true,
+        msg: 'Lista de usuarios obtenida con éxito',
+        conteo: usuarios.length,
+        usuarios
+      });
     });
-  });
 });
 
 app.post("/usuario", function (req, res) {
@@ -38,7 +38,7 @@ app.post("/usuario", function (req, res) {
   });
 
   usr.save((err, usrDB) => {
-    if(err){
+    if (err) {
       return res.status(400).json({
         ok: false,
         msg: 'Ocurrió un error',
@@ -72,7 +72,7 @@ app.put("/usuario/:id", function (req, res) {
   let body = _.pick(req.body, ['nombre', 'email']);
 
   Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true, context: 'query' }, (err, usrDB) => {
-    if(err){
+    if (err) {
       return res.status(400).json({
         ok: false,
         msg: 'Ocurrió un error al momento de actualizar',
@@ -89,10 +89,27 @@ app.put("/usuario/:id", function (req, res) {
 });
 
 app.delete("/usuario/:id", function (req, res) {
+  // let id = req.params.id;
+
+  // Usuario.deleteOne({ _id: id }, (err, usuarioBorrado) =>{
+  //   if(err){
+  //     return res.status(400).json({
+  //       ok: false,
+  //       msg: 'Ocurrió un error al momento de eliminar',
+  //       err
+  //     });
+  //   }
+
+  //   res.json({
+  //     ok: true,
+  //     msg: 'Usuario eliminado con éxito',
+  //     usuarioBorrado
+  //   });
+  // });
   let id = req.params.id;
 
-  Usuario.deleteOne({ _id: id }, (err, usuarioBorrado) =>{
-    if(err){
+  Usuario.findByIdAndUpdate(id, { estado: false }, { new: true, runValidators: true, context: 'query' }, (err, usrDB) => {
+    if (err) {
       return res.status(400).json({
         ok: false,
         msg: 'Ocurrió un error al momento de eliminar',
@@ -103,9 +120,9 @@ app.delete("/usuario/:id", function (req, res) {
     res.json({
       ok: true,
       msg: 'Usuario eliminado con éxito',
-      usuarioBorrado
+      usrDB
     });
-  });
+  })
 });
 
 module.exports = app;
