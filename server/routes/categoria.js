@@ -52,4 +52,45 @@ app.post('/categoria', (req, res) =>{
     });
 });
 
+app.put("/categoria/:id", function (req, res) {
+    let id = req.params.id;
+    let body = _.pick(req.body, ['descripcion', 'usuario']);
+  
+    Categoria.findByIdAndUpdate(id, body, { new: true, runValidators: true, context: 'query' }, (err, catDB) => {
+        if (err) {
+                return res.status(400).json({
+                ok: false,
+                msg: 'Ocurrió un error al momento de actualizar',
+                err
+            });
+        }
+  
+      res.json({
+        ok: true,
+        msg: 'Usuario actualizado con éxito',
+        categoria: catDB
+      });
+    });
+  });
+
+  app.delete('/categoria/:id', (req, res) => {
+    let id = req.params.id;
+
+    Categoria.findByIdAndRemove(id, { context: 'query' }, (err, catDB) => {
+        if (err) {
+                return res.status(400).json({
+                ok: false,
+                msg: 'Ocurrió un error al momento de actualizar',
+                err
+            });
+        }
+
+        res.json({
+            ok: true,
+            msg: 'La categoría ha si eliminada con éxito',
+            catDB
+        });
+    });
+  })
+
 module.exports = app;
