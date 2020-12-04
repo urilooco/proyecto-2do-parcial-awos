@@ -20,7 +20,7 @@ app.use(require('./routes/productos'));
 app.use(require('./routes/login'));
 
 // Para conectar con Mongo
-mongoose.connect('mongodb://localhost:27017/cafeteria', {
+mongoose.connect('mongodb+srv://admin:Rodri01tj@cluster0.wud3p.mongodb.net/cafeteria', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
