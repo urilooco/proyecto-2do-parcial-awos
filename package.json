@@ -1,6 +1,9 @@
 {
   "name": "002-servidor-rest",
   "version": "1.0.0",
+  "engines": {
+    "node": "12.11.1"
+  },
   "description": "Es una aplicación donde se utilizan los servidores rest",
   "main": "index.js",
   "scripts": {
